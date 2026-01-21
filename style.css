@@ -1,0 +1,209 @@
+/* css/style.css
+   Updated: removed white box behind blob, increased blob size,
+   and nudged the headshot image upward so hair/top of head is visible.
+   If the image still needs slight vertical tweak, tell me and I will
+   fine tune the small CSS nudge or (if necessary) the JS TARGET_FILL.
+*/
+
+/* Soft Peach theme variables (unchanged) */
+:root{
+  --bg1: #fff8f5;          /* soft warm base */
+  --bg2: #fff3ec;          /* warm gradient */
+  --glass: rgba(255,183,125,0.06);
+  --accent: #ffb67a;       /* peach accent */
+  --accent-2: #ff8fa3;     /* pink complement */
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --muted: rgba(30,25,22,0.56);
+}
+
+/* Reset & base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font);
+  color:#1b1b1b;
+  background: radial-gradient(1000px 600px at 10% 10%, rgba(255,200,170,0.04), transparent),
+              linear-gradient(120deg,var(--bg1) 0%, var(--bg2) 40%, var(--bg1) 100%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-y:auto;
+  line-height:1.45;
+}
+
+/* Animated warm overlay */
+.page::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background: linear-gradient(45deg, rgba(255,182,119,0.06), rgba(255,143,163,0.04), rgba(255,223,196,0.03));
+  background-size: 400% 400%;
+  animation: gradientShift 14s ease infinite;
+  filter: blur(28px);
+  pointer-events:none;
+}
+@keyframes gradientShift{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* Layout container */
+.container{max-width:1100px;margin:0 auto;padding:36px;}
+
+/* Hero layout */
+.hero{
+  display:flex;
+  gap:32px;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:40px;
+  padding-bottom:40px;
+}
+.hero-left{flex:1;min-width:320px}
+.hero-right{width:460px;display:flex;flex-direction:column;align-items:center;gap:16px}
+
+/* Brand logo (bigger and responsive) */
+.brand-logo{
+  display:block;
+  width:160px;
+  max-width:32%;
+  height:auto;
+  margin-bottom:14px;
+  object-fit:contain;
+  border-radius:8px;
+  background:rgba(255,255,255,0.9);
+  padding:6px;
+  border:1px solid rgba(0,0,0,0.04);
+}
+
+/* Headline / copy */
+.name{font-size:38px;margin:0 0 6px 0;letter-spacing:-0.5px;color:#0b1220}
+.role{color:var(--muted);margin:0 0 12px 0;font-weight:600}
+.tagline{color:#2b2b2b;margin-bottom:18px;line-height:1.45}
+
+/* Buttons: primary / outline / ghost */
+.contact-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.btn{
+  display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;border:1px solid transparent;
+  background:transparent;color:inherit;
+  transition:transform .15s ease, box-shadow .15s ease, opacity .12s ease;
+}
+.btn:hover{transform:translateY(-3px)}
+.btn-primary{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#2b0f06;box-shadow:0 8px 28px rgba(255,140,110,0.08);
+}
+.btn-outline{border:1px solid rgba(0,0,0,0.06);background:rgba(255,255,255,0.9)}
+.btn-ghost{color:rgba(0,0,0,0.7);border:1px dashed rgba(0,0,0,0.06);background:transparent}
+
+/* Skills chips */
+.skills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{background:rgba(0,0,0,0.03);padding:8px 12px;border-radius:999px;font-size:13px;border:1px solid rgba(0,0,0,0.04);color:#222}
+
+/* ---------- Blob (amoeba) wrapper - updated ---------- */
+/* Larger, transparent wrapper so headshot top (hair) is visible.
+   No solid white box — keeps the blob floating on the page.
+*/
+.blob-wrap{
+  width:460px;          /* increased size from 320 => 460 */
+  height:520px;         /* taller to give more vertical room for head + hair */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  filter: drop-shadow(0 18px 48px rgba(0,0,0,0.06));
+  background: transparent;   /* removed white box */
+  border-radius: 24px;       /* gentle rounding if page background shows */
+  padding: 0;
+}
+
+/* Slight visual max so very large screens don't make it enormous */
+@media (min-width:1500px){
+  .blob-wrap{width:520px;height:560px}
+}
+
+/* Blob SVG container sizing */
+.blob{width:100%;height:100%}
+.blob-stroke{opacity:0.95;stroke:rgba(0,0,0,0.06)}
+
+/* Ensure SVG image has no static transform: JS controls it
+   Add a small CSS nudge (translateY) to shift the image slightly up so top-of-head
+   is more likely to be visible. This combines with JS transform; if you prefer
+   exact control we can adjust JS TARGET_FILL instead.
+*/
+svg.blob image {x
+  width:100%;
+  height:100%;
+  display:block;
+  transform-origin:50% 40%;   /* shift the center a bit upwards */
+  transform-box: fill-box;
+  /* small CSS nudge upward (percentage). If you want more/less, change translateY to -6% / -10% / -3% */
+  /* Note: JS also sets the transform attribute; this CSS transform offsets that */
+  transform: translateY(-6%);
+}
+
+/* Cards & sections */
+.section{padding:40px 36px;border-top:1px solid rgba(0,0,0,0.04);margin-top:24px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:18px}
+.card{background:rgba(255,255,255,0.85);padding:18px;border-radius:12px;border:1px solid rgba(0,0,0,0.04);color:#0b1220}
+.card h3{margin:0 0 8px 0}
+.muted{color:rgba(15,20,25,0.6);font-size:14px}
+
+/* Education list */
+.education{display:flex;gap:24px;flex-wrap:wrap;margin-top:12px}
+.edu-item{display:flex;gap:12px;align-items:center}
+.edu-logo{width:64px;height:64px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.9);padding:6px;border:1px solid rgba(0,0,0,0.04)}
+
+/* Experience logo small */
+.exp-logo{width:56px;height:56px;object-fit:contain;border-radius:8px;background:rgba(255,255,255,0.9);padding:6px;border:1px solid rgba(0,0,0,0.04)}
+
+/* small social/links */
+.mini-links{display:flex;gap:12px;font-size:14px}
+.mini-links a{color:#2b0f06;text-decoration:none;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,0.9);border:1px solid rgba(0,0,0,0.03)}
+
+/* Footer */
+.footer{margin-top:48px;padding:24px 36px;background:transparent}
+.footer .container{display:flex;justify-content:space-between;align-items:center}
+.footer a{color:var(--accent-2);text-decoration:none}
+
+/* subtle motion on blob stroke */
+.blob-stroke{
+  transform-origin:center;
+  animation: blobPulse 8s ease-in-out infinite;
+}
+@keyframes blobPulse{
+  0%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.02)}
+  100%{transform:translateY(0) scale(1)}
+}
+
+/* responsive adjustments */
+@media (max-width:1100px){
+  .hero{flex-direction:column-reverse;padding:24px}
+  .hero-right{width:100%}
+  .blob-wrap{width:360px;height:420px}   /* smaller on narrow screens but still taller */
+  .brand-logo{width:140px;max-width:40%}
+  .container{padding:20px}
+}
+
+@media (max-width:480px){
+  .blob-wrap{width:260px;height:320px}
+  .hero-right{width:100%}
+  .brand-logo{width:120px}
+}
+
+/* tiny helpers */
+a{color:inherit}
+ul{margin:8px 0 0 18px;padding:0}
+h2{margin:0;font-size:22px;color:#111}
+h3{font-size:16px;color:#111}
+
+/* accessibility: focus outlines */
+a:focus, button:focus{outline:2px solid rgba(255,143,163,0.25);outline-offset:2px;border-radius:6px}
+
+/* print fallback (if someone prints the page) */
+@media print{
+  .page::before{display:none}
+  body{color:#000;background:#fff}
+}
